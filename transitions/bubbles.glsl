@@ -32,7 +32,7 @@ vec4 part(vec2 uv, vec4 a, vec4 b, float p) {
   for (int i = 0; i < count; i++) {
     vec2 c = position(i);
     vec2 d = uv - c;
-    float localp = clamp(2.0 * p - uv.x, 0.0, 1.0);
+    float localp = clamp(2.0 * p - c.x, 0.0, 1.0);
     float r = ease(localp, maxradius);
     if (dot(d, d) < r * r) {
       return b;
