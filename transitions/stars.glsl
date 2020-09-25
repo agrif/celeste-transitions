@@ -13,9 +13,9 @@ float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
-vec2 position(int i, float seed) {
-  float x = rand(vec2(seed, float(i)));
-  float y = rand(vec2(seed, float(i) + 0.5));
+vec2 position(int i, float s) {
+  float x = rand(vec2(s, float(i)));
+  float y = rand(vec2(s, float(i) + 0.5));
   return vec2(x * 1.2 - 0.1, y * 1.2 - 0.1);
 }
 
@@ -47,19 +47,19 @@ bool inStar(vec2 d, float r, float angle) {
 }
 
 vec4 part(vec2 uv, vec4 a, vec4 b, float p, bool flip) {
-  float seed = seed;
+  float s = seed;
   if (flip) {
-    seed += 0.5;
+    s += 0.5;
   }
   float maxradius = 1.5;
   uv.y /= ratio;
   for (int i = 0; i < count; i++) {
-    vec2 c = position(i, seed);
+    vec2 c = position(i, s);
     vec2 d = uv - c;
     float rscale = 0.5 - abs(c.y * ratio - 0.5);
     rscale = 1.0 - clamp(4.0 * (0.25 - rscale * rscale), 0.0, 0.9);
-    rscale *= clamp(rand(vec2(seed, float(i) + 0.25)), 0.2, 1.0);
-    float angle = 2.0 * pi * rand(vec2(seed, float(i) + 0.75));
+    rscale *= clamp(rand(vec2(s, float(i) + 0.25)), 0.2, 1.0);
+    float angle = 2.0 * pi * rand(vec2(s, float(i) + 0.75));
     float r = ease(p, maxradius) * rscale;
     if (inStar(d, r, angle)) {
       return b;

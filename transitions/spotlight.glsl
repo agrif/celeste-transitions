@@ -2,7 +2,7 @@
 // License: MIT
 
 uniform float hold; // = 0.4
-uniform float radius; // = 0.5
+uniform float radius; // = 0.2
 uniform vec2 center; // = vec2(0.5, 0.5)
 
 uniform vec4 background; // = vec4(0.0, 0.0, 0.0, 1.0)
@@ -14,19 +14,19 @@ float ease(float p) {
 }
 
 vec4 part(vec2 uv, vec4 a, vec4 b, float p) {
-  float radius = radius;
-  float stop1 = radius * (1.0 - hold);
+  float r = radius;
+  float stop1 = r * (1.0 - hold);
   float stop2 = stop1 + hold;
   if (p < stop1) {
-    radius = mix(0.0, radius, ease(p / stop1));
+    r = mix(0.0, r, ease(p / stop1));
   } else if (p > stop2) {
-    radius = mix(radius, 1.0, (p - stop2) / (1.0 - stop2));
+    r = mix(r, 1.0, (p - stop2) / (1.0 - stop2));
   }
   vec2 normcenter = center;
   normcenter.y /= ratio;
   uv.y /= ratio;
   vec2 dist = normcenter - uv;
-  if (dot(dist, dist) < radius * radius) {
+  if (dot(dist, dist) < r * r) {
     return b;
   }
   return a;
