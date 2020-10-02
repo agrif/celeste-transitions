@@ -1,11 +1,20 @@
-uniform float4x4 ViewProj;
-uniform texture2d image_0;
-uniform texture2d image_1;
-uniform float2 uv_pixel_interval;
-uniform float transition_percentage;
+// -*- mode: c -*-
+
+// for streamfx
+// https://github.com/Xaymar/obs-StreamFX/
+
+uniform float4x4 ViewProj<bool automatic = true;>;
+uniform float4 ViewSize<bool automatic = true;>;
+uniform texture2d InputA<bool automatic = true;>;
+uniform texture2d InputB<bool automatic = true;>;
+uniform float TransitionTime<bool automatic = true;>;
+uniform float4x4 Random<bool automatic = true;>;
+
+{{ uniforms }}
 
 #define ratio getRatio()
-#define progress transition_percentage
+#define progress TransitionTime
+#define seed Random[0][1]
 #define mix(a, b, p) lerp(a, b, p)
 #define fract(x) frac(x)
 #define atan(y, x) atan2(y, x)
@@ -17,17 +26,17 @@ sampler_state textureSampler {
 };
 
 float getRatio() {
-    return uv_pixel_interval.y / uv_pixel_interval.x;
+    return ViewSize.x / ViewSize.y;
 }
 
 float4 getFromColor(float2 uv) {
     uv.y = 1.0 - uv.y;
-    return float4(image_0.Sample(textureSampler, uv).rgb, 1.0);
+    return float4(InputA.Sample(textureSampler, uv).rgb, 1.0);
 }
 
 float4 getToColor(float2 uv) {
     uv.y = 1.0 - uv.y;
-    return float4(image_1.Sample(textureSampler, uv).rgb, 1.0);
+    return float4(InputB.Sample(textureSampler, uv).rgb, 1.0);
 }
 
 {{ body }}
